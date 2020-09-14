@@ -1,3 +1,5 @@
+print("Cleaning Up")
+
 for slot=1,16 do
   turtle.select(slot)
   local item = turtle.getItemDetail()
