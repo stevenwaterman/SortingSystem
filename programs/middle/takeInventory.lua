@@ -1,25 +1,11 @@
 local function emptying()
-    local contents = nil;
-    while true do
-        local sucked = turtle.suck()
-        if sucked then
-            item = turtle.getItemDetail()
-            if item == nil then
-                return contents
-            else
-                if contents == nil then
-                  contents = {
-                    name = item.name,
-                    count = 0
-                  }
-                end
-                contents.count = contents.count + item.count;
-                turtle.dropDown()
-            end
-        else
-          return contents
-        end
+    local contents = {};
+    while turtle.suck() do
+      item = turtle.getItemDetail()
+      table.insert(contents, item)
+      turtle.dropDown()
     end
+    return contents
 end
 
 local function filling()
@@ -32,7 +18,7 @@ end
 local function readInventory()
   local inventoryFile = fs.open("inventory", "r")
   local serialisedData = inventoryFile.readAll()
-  local data = textutils.unserialize(serialisedInventory)
+  local data = textutils.unserialize(serialisedData)
   inventoryFile.close()
   return data
 end
@@ -44,24 +30,35 @@ local function writeInventory(data)
   inventoryFile.close()
 end
 
-local x, y, subState, inventorySlot = ...
+local x, y, subState, inventorySlotStr = ...
+local inventorySlot = tonumber(inventorySlotStr)
 
-if subState == nil then
+if subState == "start" then
   local inventory = {nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil}
   writeInventory(inventory)
+  shell.run("/programs/_setState.lua", x, "any", "takeInventory", "emptying", 1)
 
-elseif substate == "emptying" then
+elseif subState == "emptying" then
+  turtle.dig()
+
   if inventorySlot > 16 then
-    shell.run("/programs/setState.lua", x, "any", "takeInventory", "done")
+    shell.run("/programs/_setState.lua", x, "any", "takeInventory", "done")
   else
     local inventory = readInventory()
-    inventory[inventorySlot] = emptying()
-    sleep(1)
-    shell.run("/programs/setState.lua", x, "any", "takeInventory", "filling", inventorySlot)
-    writeInventory(inventory)
+
+    turtle.select(inventorySlot)
+    if turtle.getItemDetail(inventorySlot) ~= nil then
+      turtle.place()
+      inventory[inventorySlot] = emptying()
+      sleep(1)
+      writeInventory(inventory)
+      shell.run("/programs/_setState.lua", x, "any", "takeInventory", "filling", inventorySlot)
+    else
+      shell.run("/programs/_setState.lua", x, "any", "takeInventory", "emptying", inventorySlot+1)
+    end
   end
 
-elseif substate == "filling" then
+elseif subState == "filling" then
   filling()
 
 elseif subState == "done" then

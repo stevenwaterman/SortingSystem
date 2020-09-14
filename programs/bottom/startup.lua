@@ -23,19 +23,19 @@ local function main()
   shell.run("/programs/_main.lua", x, y)
 end
 
-local x = nil
-local y = nil
-
 local function getCoords()
   shell.run("/management/getType.lua")
   shell.run("rm /position")
   shell.run("/programs/_getPosition.lua")
   x = readPosition()
   y = os.getComputerLabel()
-  local modem = peripheral.wrap("right")
-  modem.transmit(1005, 1, "Done")
-  wait()
+  print("Got Coords: "..x..","..y)
+  shell.run("/programs/_done.lua")
 end
 
-parallel.waitForAny(watchState, getCoords, waitForIdle)
+local function waitForCoords()
+  parallel.waitForAll(getCoords, waitForIdle)
+end
+
+parallel.waitForAny(watchState, waitForCoords)
 parallel.waitForAll(watchState, main)

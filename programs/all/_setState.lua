@@ -1,5 +1,9 @@
 local x, y, state, subState, config1, config2, config3 = ...
 
+if subState == nil then
+  subState = "start"
+end
+
 local data = {
   x = x,
   y = y,

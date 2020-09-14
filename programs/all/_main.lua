@@ -1,6 +1,4 @@
 local x, y = ...
-local modem = peripheral.wrap("right")
-modem.open(1003)
 
 local state = "idle"
 local subState = nil
@@ -24,7 +22,7 @@ local function wait()
 end
 
 local function run()
-  print("Running "..state)
+  print("Running "..state..":"..tostring(subState))
   shell.run("programs/"..state..".lua", x, y, subState, config1, config2, config3)
   wait()
 end

@@ -6,26 +6,21 @@ local function emptying()
 end
 
 local function filling()
-  while true do
-    local sucked = turtle.suck()
-    if sucked then
-      turtle.dropUp()
-    else
-      return
-    end
+  while turtle.suck() do
+    turtle.dropUp()
   end
 end
 
-local y, x, subState, inventorySlot = ...
+local x, y, subState, inventorySlotStr = ...
+local inventorySlot = tonumber(inventorySlotStr)
 
-if subState == nil then
-
-elseif substate == "emptying" then
+if subState == "emptying" then
   emptying()
-  
-elseif substate == "filling" then
+
+elseif subState == "filling" then
   filling()
-  shell.run("/programs/setState.lua", "any", x, "takeInventory", "emptying", inventorySlot + 1)
+  sleep(1)
+  shell.run("/programs/_setState.lua", x, "any", "takeInventory", "emptying", inventorySlot + 1)
 
 elseif subState == "done" then
   shell.run("/programs/_done.lua")

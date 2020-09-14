@@ -24,11 +24,9 @@ local function main()
 end
 
 local function takeInventory()
+  sleep(1)
   shell.run("/programs/_setState.lua", x, "any", "takeInventory")
 end
-
-local x = nil
-local y = nil
 
 local function getCoords()
   shell.run("/management/getType.lua")
@@ -36,10 +34,15 @@ local function getCoords()
   shell.run("/programs/_getPosition.lua")
   x = readPosition()
   y = os.getComputerLabel()
-  local modem = peripheral.wrap("right")
-  modem.transmit(1005, 1, "Done")
-  wait()
+  print("Got Coords: "..x..","..y)
+  shell.run("/programs/_done.lua")
 end
 
-parallel.waitForAny(watchState, getCoords, waitForIdle)
-parallel.waitForAll(watchState, main)
+local function waitForCoords()
+  parallel.waitForAll(getCoords, waitForIdle)
+end
+
+parallel.waitForAny(watchState, waitForCoords)
+parallel.waitForAll(watchState, main
+,takeInventory
+)
