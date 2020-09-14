@@ -21,8 +21,15 @@ watchDone()
 watchDone()
 
 while true do
-  print("Ready!")
-  local item = read()
-  shell.run("/controller/_setState.lua", "any", "any", "shulkers", "start", item)
+  print("Ready! Enter Task:")
+  local state = read()
+  if state == "search" then
+    local item = read()
+    shell.run("/controller/_setState.lua", "any", "any", "search", "start", item)
+  elseif state == "takeInventory" then
+    shell.run("/controller/_setState.lua", "any", "any", "takeInventory")
+  elseif state == "cleanup" then
+    shell.run("/controller/_setState.lua", "any", "any", "cleanup")
+  end
   watchDone()
 end

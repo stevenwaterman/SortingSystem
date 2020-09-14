@@ -16,20 +16,20 @@ local function writeInventory(data)
 end
 
 if subState == "start" then
-  shell.run("/programs/_setState.lua", x, "any", "shulkers", "emptying", requestedItem, 1)
+  shell.run("/programs/_setState.lua", x, "any", "search", "emptying", requestedItem, 1)
 elseif subState == "emptying" then
   turtle.dig()
 
   local inventorySlot = tonumber(inventorySlotStr)
 
   if inventorySlot > 16 then
-    shell.run("/programs/_setState.lua", x, "any", "shulkers", "done", requestedItem)
+    shell.run("/programs/_setState.lua", x, "any", "search", "done", requestedItem)
   else
     local inventory = readInventory()
     local slotInventory = inventory[inventorySlot]
   
     if slotInventory == nil then
-      shell.run("/programs/_setState.lua", x, "any", "shulkers", "emptying", requestedItem, inventorySlot + 1)
+      shell.run("/programs/_setState.lua", x, "any", "search", "emptying", requestedItem, inventorySlot + 1)
     else
       local anyMatch = false
       for index, item in pairs(slotInventory) do
@@ -49,9 +49,9 @@ elseif subState == "emptying" then
             turtle.dropDown()
           end
         end
-        shell.run("/programs/_setState.lua", x, "any", "shulkers", "filling", requestedItem, inventorySlot)
+        shell.run("/programs/_setState.lua", x, "any", "search", "filling", requestedItem, inventorySlot)
       else
-        shell.run("/programs/_setState.lua", x, "any", "shulkers", "emptying", requestedItem, inventorySlot + 1)
+        shell.run("/programs/_setState.lua", x, "any", "search", "emptying", requestedItem, inventorySlot + 1)
       end
     end
   end

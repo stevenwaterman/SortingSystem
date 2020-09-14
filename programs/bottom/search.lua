@@ -11,6 +11,8 @@ local function filling()
   end
 end
 
+turtle.select(1)
+
 if subState == "start" then
   redstone.setOutput("bottom", false)
 elseif subState == "emptying" then
@@ -36,7 +38,7 @@ elseif subState == "filling" then
   filling()
   sleep(1)
   local inventorySlot = tonumber(inventorySlotStr)
-  shell.run("/programs/_setState.lua", x, "any", "shulkers", "emptying", requestedItem, inventorySlot + 1)
+  shell.run("/programs/_setState.lua", x, "any", "search", "emptying", requestedItem, inventorySlot + 1)
   
 elseif subState == "done" then
   shell.run("/programs/_done.lua")

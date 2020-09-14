@@ -23,10 +23,6 @@ local function main()
   shell.run("/programs/_main.lua", x, y)
 end
 
-local function takeInventory()
-  shell.run("/programs/_setState.lua", x, "any", "takeInventory")
-end
-
 local function getCoords()
   shell.run("/management/getType.lua")
   shell.run("rm /position")
@@ -37,9 +33,14 @@ local function getCoords()
   shell.run("/programs/_done.lua")
 end
 
-local function waitForCoords()
-  parallel.waitForAll(getCoords, waitForIdle)
+local function cleanup()
+  shell.run("/programs/cleanup.lua")
 end
 
-parallel.waitForAny(watchState, waitForCoords)
+local function waitForBoot()
+  parallel.waitForAll(getCoords, waitForIdle)
+  parallel.waitForAll(cleanup, waitForIdle)
+end
+
+parallel.waitForAny(watchState, waitForBoot)
 parallel.waitForAll(watchState, main)

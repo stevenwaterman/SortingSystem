@@ -14,6 +14,8 @@ end
 local x, y, subState, inventorySlotStr = ...
 local inventorySlot = tonumber(inventorySlotStr)
 
+turtle.select(1)
+
 if subState == "emptying" then
   emptying()
 
