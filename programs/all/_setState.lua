@@ -1,8 +1,8 @@
-local type, position, state, subState, config1, config2, config3 = ...
+local x, y, state, subState, config1, config2, config3 = ...
 
 local data = {
-  x = position,
-  y = type,
+  x = x,
+  y = y,
   state = state,
   subState = subState,
   config1 = config1,

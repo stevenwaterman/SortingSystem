@@ -1,4 +1,4 @@
-local type, position = ...
+local x, y = ...
 local modem = peripheral.wrap("right")
 modem.open(1003)
 
@@ -10,7 +10,6 @@ local config3 = nil
 
 local function waitForStateChange()
   local event, newState, newSubState, newConfig1, newConfig2, newConfig3 = os.pullEvent("stateChange")
-  -- print(newState)
   state = newState
   subState = newSubState
   config1 = newConfig1
@@ -26,7 +25,7 @@ end
 
 local function run()
   print("Running "..state)
-  shell.run("programs/"..state..".lua", type, position, subState, config1, config2, config3)
+  shell.run("programs/"..state..".lua", x, y, subState, config1, config2, config3)
   wait()
 end
 

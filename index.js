@@ -23,13 +23,16 @@ function getResponse() {
   return `
     {
       top = {
-        ${serialiseFolder("programs/top")}
+        ${serialiseFolder("programs/top")},
+        ${serialiseFolder("programs/all")}
       },
       middle = {
-        ${serialiseFolder("programs/middle")}
+        ${serialiseFolder("programs/middle")},
+        ${serialiseFolder("programs/all")}
       },
       bottom = {
-        ${serialiseFolder("programs/bottom")}
+        ${serialiseFolder("programs/bottom")},
+        ${serialiseFolder("programs/all")}
       },
       controller = {
         ${serialiseFolder("programs/controller")}

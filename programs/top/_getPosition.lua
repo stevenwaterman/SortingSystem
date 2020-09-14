@@ -48,5 +48,3 @@ b = function()
   waitForDone(position)
 end
 parallel.waitForAny(a, b)
-
-modem.transmit(1005, 1, "Done")

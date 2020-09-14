@@ -12,16 +12,12 @@ while true do
   local event, side, channel, replyChannel, message, distance = os.pullEvent("modem_message")
   if channel == 1003 then
     local data = textutils.unserialize(message)
-    local type = os.getComputerLabel()
-    local position = readPosition()
+    
+    local x = readPosition()
+    local y = os.getComputerLabel()
 
-    -- print(position)
-    -- print(data.y)
-    -- print(data.x)
-
-    if data.y == "any" or data.y == type then
-      if data.x == "any" or data.x == position then
-        -- print(data.state)
+    if data.x == "any" or data.x == x then
+      if data.y == "any" or data.y == y then
         state = data.state
         subState = data.subState
         config1 = data.config1
