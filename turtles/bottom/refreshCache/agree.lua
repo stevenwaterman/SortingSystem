@@ -1,0 +1,1 @@
+messaging.send("middle", inventory.get())

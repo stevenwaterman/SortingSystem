@@ -1,41 +1,49 @@
 const express = require('express')
 const path = require('path');
 const fs = require('fs');
+var glob = require("glob")
 
 const app = express()
 const port = 8080
 
-function serialiseFile(name, content) {
-  const escapedName = name.replace(".lua", "");
-  let escapedContent = content.replace(/"/g, "\\\"");
-  escapedContent = escapedContent.replace(/\n/g, "\\n");
-  return `${escapedName} = "${escapedContent}"`;
+function serialiseFile(name, folder, content) {
+  name = name.replace(".lua", "");
+  name = name.replace(folder, "");
+  name = name.replace(/\//g, "_")
+
+  content = content.replace(/"/g, "\\\"");
+  content = content.replace(/\n/g, "\\n");
+
+  return `${name} = "${content}"`;
 }
 
 function serialiseFolder(folder) {
-  const directoryPath = path.join(__dirname, folder);
-  const fileNames = fs.readdirSync(directoryPath);
-  const serialisedFiles = fileNames.map(fileName => serialiseFile(fileName, fs.readFileSync(path.join(directoryPath, fileName), {encoding: "utf-8"})));
+  const fileNames = glob.sync(`${folder}/**/*.lua`);
+  const serialisedFiles = fileNames.map(fileName => serialiseFile(fileName, folder, fs.readFileSync(fileName, {encoding: "utf-8"})));
   return serialisedFiles.join(",\n");
 }
 
 function getResponse() {
   return `
     {
+      connector = {
+        ${serialiseFolder("turtles/connector/")},
+        ${serialiseFolder("turtles/all/")}
+      },
       top = {
-        ${serialiseFolder("programs/top")},
-        ${serialiseFolder("programs/all")}
+        ${serialiseFolder("turtles/top/")},
+        ${serialiseFolder("turtles/all/")}
       },
       middle = {
-        ${serialiseFolder("programs/middle")},
-        ${serialiseFolder("programs/all")}
+        ${serialiseFolder("turtles/middle/")},
+        ${serialiseFolder("turtles/all/")}
       },
       bottom = {
-        ${serialiseFolder("programs/bottom")},
-        ${serialiseFolder("programs/all")}
+        ${serialiseFolder("turtles/bottom/")},
+        ${serialiseFolder("turtles/all/")}
       },
       controller = {
-        ${serialiseFolder("programs/controller")}
+        ${serialiseFolder("controller/")}
       }
     }
   `;

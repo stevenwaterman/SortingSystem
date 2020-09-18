@@ -1,0 +1,2 @@
+turtle.dig()
+messaging.turtleDone()
